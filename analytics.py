@@ -1,24 +1,38 @@
 import pandas as pd
 from pandas.core.interchange.dataframe_protocol import DataFrame
 
-MIN_DURATION = 1.0
+MIN_OCCUPANCY = 3.0
 
 def compute_average_delay(events: list, save_path: str| None=None) -> tuple[float | int, DataFrame]:
-    """Считает, сколько времени стол был пуст до прихода следующего человека"""
+    """
+    Считает среднее время ожидания стола:
+    учитываются только "валидные" occupancy (достаточно длинные)
+    """
     df = pd.DataFrame(events, columns=["event", "time"])
 
     delays = []
     last_empty = None
+    last_approach = None
 
     for _, row in df.iterrows():
-        if row["event"] == "empty":
-            last_empty = row["time"]
+        event = row["event"]
+        time = row["time"]
 
-        elif row["event"] == "approach" and last_empty is not None:
-            delay = row["time"] - last_empty
-            if delay > MIN_DURATION:
-                delays.append(delay)
-            last_empty = None
+        if event == "empty":
+            if last_approach is not None:  # фиксируем момент освобождения стола
+                occupancy_duration = time - last_approach
+
+                if occupancy_duration >= MIN_OCCUPANCY:  # проверяем, что сидели достаточно долго
+                    if last_empty is not None:
+                        delay = last_approach - last_empty
+                        delays.append(delay)
+
+            last_empty = time
+            last_approach = None
+
+
+        elif event == "approach":
+            last_approach = time  # фиксируем начало "сидения"
 
     if save_path:
         df.to_csv(save_path, index=False)
