@@ -15,10 +15,10 @@ class PersonDetector:
         results = self.model(frame)[0]   # YOLO анализирует кадр
 
         people = []
-        for box in results.boxes:  # список bounding box-ов (массивов PyTorch)
+        for box in results.boxes:  # список bounding boxes (массивов PyTorch)
             cls = int(box.cls[0])
             confidence = float(box.conf[0])
-            if cls == 0 and confidence > self.conf:  # person
+            if cls == 0 and confidence > self.conf:
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
                 people.append((x1, y1, x2, y2))
 

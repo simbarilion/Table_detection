@@ -9,17 +9,17 @@ from utils import iou
 
 def main(video_path, conf):
     cap = cv2.VideoCapture(video_path)
-    fps = cap.get(cv2.CAP_PROP_FPS)
+    fps = cap.get(cv2.CAP_PROP_FPS)  # частота кадров в секунду видео
 
-    detector = PersonDetector(conf=conf)  # детектор с параметром confidence
-    tracker = TableTracker(threshold=5)    # трекер с фильтром
+    detector = PersonDetector(conf=conf)
+    tracker = TableTracker(threshold=5)
 
-    ret, frame = cap.read()   # читаем первый кадр
+    ret, frame = cap.read()
     roi = cv2.selectROI("Select Table", frame, False)
     x, y, w, h = roi
 
-    fourcc = cv2.VideoWriter_fourcc(*"mp4v")   # видео writer
-    out = cv2.VideoWriter(                     # создаём файл
+    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+    out = cv2.VideoWriter(
         "output/output.mp4",
         fourcc,
         fps,
@@ -33,25 +33,25 @@ def main(video_path, conf):
             break
         timestamp = frame_id / fps
 
-        people = detector.detect(frame)   # детекция людей
-        has_person = any(iou(p, roi) > 0.2 for p in people)   # есть ли человек у стола, 0.2 - эмпирический порог
-        state = tracker.update(has_person, timestamp)  # передаем уже готовый boolean - "есть человек или нет"
+        people = detector.detect(frame)
+        has_person = any(iou(p, roi) > 0.2 for p in people)   # 0.2 - эмпирический порог пересечения
+        state = tracker.update(has_person, timestamp)
 
-        color = (0, 255, 0) if state == "EMPTY" else (0, 0, 255) # визуализация
+        color = (0, 255, 0) if state == "EMPTY" else (0, 0, 255)
 
         cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
         cv2.putText(frame, state, (x, y - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
 
-        out.write(frame)  # записываем каждый кадр
+        out.write(frame)
 
         frame_id += 1
 
     cap.release()
-    out.release()   # закрываем файл
+    out.release()
     cv2.destroyAllWindows()
 
-    avg_delay, df = compute_average_delay(tracker.events, save_path="events.csv")  # аналитика
+    avg_delay, df = compute_average_delay(tracker.events, save_path="events.csv")
 
     print("Average delay:", avg_delay)
 
@@ -59,7 +59,7 @@ def main(video_path, conf):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--video", required=True)
-    parser.add_argument("--conf", type=float, default=0.4)  # CLI параметр теперь можно запускать: python main.py --video video.mp4 --conf 0.3
+    parser.add_argument("--conf", type=float, default=0.4)
     args = parser.parse_args()
 
     main(args.video, args.conf)

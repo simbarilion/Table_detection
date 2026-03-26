@@ -1,7 +1,9 @@
 import pandas as pd
+from pandas.core.interchange.dataframe_protocol import DataFrame
 
-def compute_average_delay(events, save_path=None):
-    """Считает, сколько времени стол был пуст, среднее время ожидания"""
+
+def compute_average_delay(events: list, save_path: str| None=None) -> tuple[float | int, DataFrame]:
+    """Считает, сколько времени стол был пуст до прихода следующего человека"""
     df = pd.DataFrame(events, columns=["event", "time"])
 
     delays = []
