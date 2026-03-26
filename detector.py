@@ -1,5 +1,6 @@
 from typing import Any
 
+import torch
 from ultralytics import YOLO
 
 class PersonDetector:
@@ -8,11 +9,12 @@ class PersonDetector:
     Возвращает people = [(x1, y1, x2, y2), ...]
     """
     def __init__(self, model_path="yolov8n.pt", conf=0.4):
+        self.device = 0 if torch.cuda.is_available() else "cpu"
         self.model = YOLO(model_path)
         self.conf = conf
 
     def detect(self, frame: Any) -> list:
-        results = self.model(frame)[0]   # YOLO анализирует кадр
+        results = self.model(frame, verbose=False, imgsz=320, device=self.device)[0]   # YOLO анализирует кадр
 
         people = []
         for box in results.boxes:  # список bounding boxes (массивов PyTorch)

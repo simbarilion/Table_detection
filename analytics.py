@@ -1,6 +1,7 @@
 import pandas as pd
 from pandas.core.interchange.dataframe_protocol import DataFrame
 
+MIN_DURATION = 1.0
 
 def compute_average_delay(events: list, save_path: str| None=None) -> tuple[float | int, DataFrame]:
     """Считает, сколько времени стол был пуст до прихода следующего человека"""
@@ -14,7 +15,9 @@ def compute_average_delay(events: list, save_path: str| None=None) -> tuple[floa
             last_empty = row["time"]
 
         elif row["event"] == "approach" and last_empty is not None:
-            delays.append(row["time"] - last_empty)
+            delay = row["time"] - last_empty
+            if delay > MIN_DURATION:
+                delays.append(delay)
             last_empty = None
 
     if save_path:
