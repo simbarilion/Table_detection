@@ -1,0 +1,46 @@
+[project]
+name = "table-detection"
+version = "0.1.0"
+description = "Simple prototype of table cleaning detection system using video"
+authors = [
+    {name = "nadezhda",email = "nadezhda13popova@gmail.com"}
+]
+requires-python = "^3.12"
+dependencies = [
+    "opencv-python (>=4.13.0.92,<5.0.0.0)",
+    "pandas (>=3.0.1,<4.0.0)",
+    "ultralytics (>=8.4.27,<9.0.0)",
+    "numpy (>=2.4.3,<3.0.0)",
+    "pre-commit (>=4.5.1,<5.0.0)"
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+lint = [
+    "flake8 (>=7.3.0,<8.0.0)",
+    "black (>=26.3.1,<27.0.0)",
+    "isort (>=8.0.1,<9.0.0)"
+]
+
+[tool.black]
+line-length = 119
+exclude = """
+/(
+    .git
+    .venv
+    venv
+    __pycache__
+)/
+"""
+
+[tool.isort]
+profile = "black"
+line_length = 119
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+combine_as_imports = true
+skip_gitignore = true

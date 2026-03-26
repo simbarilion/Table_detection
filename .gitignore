@@ -1,0 +1,52 @@
+# ================================
+# Python
+# ================================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.pyc
+
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# Poetry
+poetry.lock
+.cache/
+*.egg-info/
+
+# Environment variables
+.env
+!.env.example
+
+# ================================
+# Tests / coverage
+# ================================
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# ================================
+# Logs
+# ================================
+*.log
+logs/
+log/
+
+# ================================
+# IDE / Editors
+# ================================
+.idea/
+.vscode/
+*.iml
+
+# ================================
+# Temporary files
+# ================================
+tmp/
+temp/
