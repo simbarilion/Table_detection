@@ -31,7 +31,7 @@ def compute_average_delay(events: list, save_path: str | None = None) -> tuple[f
                     delays.append(delay)
 
         elif event == "empty":
-            if current_approach_time is not None:  # проверяем, что это был "настоящий визит"
+            if current_approach_time is not None:  # проверяем, что был "настоящий визит"
                 occupancy_duration = time - current_approach_time
 
                 if occupancy_duration >= MIN_OCCUPANCY:
@@ -41,6 +41,4 @@ def compute_average_delay(events: list, save_path: str | None = None) -> tuple[f
     if save_path:
         df.to_csv(save_path, index=False)
     avg_delay = round(sum(delays) / len(delays), 2) if delays else 0.0
-    print(f"Valid delays found: {len(delays)} → {delays}")
-    print(f"Average delay: {avg_delay} seconds")
     return avg_delay, df
