@@ -51,6 +51,6 @@ log/
 tmp/
 temp/
 
-data/
-output/
-*.mp4
+/data/
+/output/
+*.csv
