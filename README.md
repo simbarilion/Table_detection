@@ -167,7 +167,11 @@ pip install -r requirements.txt
 или
 poetry install
 ```
-3. Запустите проект
+3. Загрузите видео из Google Drive и положите в директорию data/:
+```
+https://drive.google.com/file/d/1f3iI30dhnnoZYqapY1uaDUPhcyqcHMqF/view?usp=sharing
+```
+4. Запустите проект
 ```bash
 python main.py --video data/video_2.mp4 --conf 0.3
 ```
