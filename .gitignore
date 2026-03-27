@@ -51,6 +51,5 @@ log/
 tmp/
 temp/
 
-/data/
 /output/
 *.csv

@@ -14,13 +14,13 @@ logger = setup_logger(__name__, log_to_console=True)
 
 
 def main(video_path, conf):
-    logger.info(f"Start processing video: {video_path}")
+    logger.info("Start processing video: %s", video_path)
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         logger.error("Video not opened!")
     fps = cap.get(cv2.CAP_PROP_FPS)  # частота кадров в секунду видео
     total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    logger.info(f"FPS: {fps}, total frames: {total_frames}")
+    logger.info("FPS: %s, total frames: %d", fps, total_frames)
 
     detector = PersonDetector(conf=conf)
     tracker = TableTracker(threshold=10, min_occupancy_seconds=2.5)
@@ -36,12 +36,12 @@ def main(video_path, conf):
         logger.error("ROI not selected properly!")
         return
     cv2.destroyWindow("Select Table")
-    logger.info(f"ROI selected: {roi}")
+    logger.info("ROI selected: %s", roi)
 
     people = detector.detect(frame)
     initial_has_person = any(person_score(p, roi) > 0.2 for p in people)
     tracker.state = "OCCUPIED" if initial_has_person else "EMPTY"
-    logger.info(f"Initial state: {tracker.state}")
+    logger.info("Initial state: %s", tracker.state)
 
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
     out = cv2.VideoWriter(OUTPUT_PATH, fourcc, fps, (frame.shape[1], frame.shape[0]))
@@ -75,10 +75,10 @@ def main(video_path, conf):
 
         for x1, y1, x2, y2 in people:
             cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
-        logger.debug(f"Detected {len(people)} people | has_person in ROI: {has_person}")
+        logger.debug("Detected %d people | has_person in ROI: %s", len(people), has_person)
 
         state = tracker.update(has_person, timestamp)
-        logger.debug(f"State: {state}, buffer: {tracker.buffer}")
+        logger.debug("State: %s, buffer: %s", state, tracker.buffer)
 
         color = (0, 255, 0) if state == "EMPTY" else (0, 0, 255)
         cv2.rectangle(frame, (x, y), (x + w, y + h), color, 3)
@@ -94,7 +94,7 @@ def main(video_path, conf):
     avg_delay, df = compute_average_delay(tracker.events, save_path=CSV_PATH)
 
     print("Average delay:", avg_delay)
-    logger.info(f"Finished. Avg delay: {avg_delay}")
+    logger.info("Finished. Avg delay: %d", avg_delay)
 
 
 if __name__ == "__main__":
