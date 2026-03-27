@@ -4,11 +4,12 @@ class TableTracker:
     approach: человек стабильно появился
     empty: человек стабильно ушёл
     """
+
     def __init__(self, threshold=10, min_occupancy_seconds=2.5):
         self.state = "EMPTY"
-        self.buffer = 0   # счетчик "уверенности", что человек есть
-        self.threshold = threshold   # количество кадров подряд для подтверждения
-        self.min_occupancy_seconds = min_occupancy_seconds # минимум сколько должен "посидеть"
+        self.buffer = 0  # счетчик "уверенности", что человек есть
+        self.threshold = threshold  # количество кадров подряд для подтверждения
+        self.min_occupancy_seconds = min_occupancy_seconds  # минимум сколько должен "посидеть"
         self.events = []
         self.last_approach_time = 0.0
 

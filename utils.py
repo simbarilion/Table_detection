@@ -4,7 +4,7 @@ from typing import Any
 def iou(box: tuple, roi: Any) -> float:
     """Вычисляет, насколько человек "внутри" стола (площадь пересечения)"""
     x1, y1, x2, y2 = box  # человек
-    rx, ry, rw, rh = roi # стол
+    rx, ry, rw, rh = roi  # стол
 
     rx2 = rx + rw
     ry2 = ry + rh
@@ -23,6 +23,7 @@ def iou(box: tuple, roi: Any) -> float:
 
     return inter_area / union if union > 0 else 0.0
 
+
 def person_score(box: Any, roi: Any, min_iou=0.05) -> float:
     """
     Смешанный скоринг:
@@ -38,7 +39,7 @@ def person_score(box: Any, roi: Any, min_iou=0.05) -> float:
     roi_cx = rx + rw / 2  # центр стола
     roi_cy = ry + rh / 2
 
-    dist = ((cx - roi_cx)**2 + (cy - roi_cy)**2) ** 0.5  # расстояние
+    dist = ((cx - roi_cx) ** 2 + (cy - roi_cy) ** 2) ** 0.5  # расстояние
     max_dist = (rw + rh) / 3
 
     dist_score = max(0, 1 - (dist / max_dist))

@@ -3,7 +3,8 @@ from pandas.core.interchange.dataframe_protocol import DataFrame
 
 MIN_OCCUPANCY = 3.0
 
-def compute_average_delay(events: list, save_path: str| None=None) -> tuple[float | int, DataFrame]:
+
+def compute_average_delay(events: list, save_path: str | None = None) -> tuple[float | int, DataFrame]:
     """
     Считает среднее время ожидания стола:
     учитываются только "валидные" occupancy (достаточно длинные)
@@ -29,7 +30,6 @@ def compute_average_delay(events: list, save_path: str| None=None) -> tuple[floa
 
             last_empty = time
             last_approach = None
-
 
         elif event == "approach":
             last_approach = time  # фиксируем начало "сидения"
